@@ -1,0 +1,29 @@
+# ── KAIROS · Cabina — ajustes para hosting Apache / cPanel ───────────────────
+# Si tras subir esto el sitio muestra "Error 500 Internal Server Error",
+# simplemente BORRA este archivo: la cabina funciona igual sin el
+# (solo se pierde poder INSTALARLA como app de movil — la PWA).
+
+# 1) MIME correcto para que el movil pueda instalar la cabina como app
+AddType application/manifest+json .webmanifest
+AddType image/svg+xml .svg
+
+# 2) Cabeceras (solo si el modulo esta disponible; si no, se ignora)
+<IfModule mod_headers.c>
+  # El snapshot cifrado nunca se sirve viejo
+  <FilesMatch "\.enc$">
+    Header set Cache-Control "no-store"
+  </FilesMatch>
+  # El service worker controla toda su carpeta y se revalida siempre
+  <FilesMatch "sw\.js$">
+    Header set Service-Worker-Allowed "/"
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# 3) (OPCIONAL) Forzar HTTPS. Descomenta SOLO si la cabina abre por http://
+#    y el descifrado no arranca. Si causa un bucle de redireccion, vuelve a comentarlo.
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} off
+#   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# </IfModule>

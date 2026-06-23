@@ -1,0 +1,18 @@
+{
+  "name": "KAIROS · Cabina",
+  "short_name": "KAIROS",
+  "description": "Cabina de métricas KAIROS — cifrada en la nube",
+  "start_url": "./cabina-drive.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#090b11",
+  "background_color": "#090b11",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
