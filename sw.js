@@ -9,8 +9,8 @@
  *     que el SW no puede leer).
  */
 
-const SHELL_V = 'kairos-shell-v3';
-const DATA_V  = 'kairos-data-v2';
+const SHELL_V = 'kairos-shell-v4';
+const DATA_V  = 'kairos-data-v4';
 
 const SHELL_URLS = [
   './cabina-drive.html',
