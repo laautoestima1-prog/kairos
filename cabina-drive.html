@@ -28,8 +28,6 @@
   body{font-family:'Space Grotesk',system-ui,sans-serif;color:var(--txt);
     background:radial-gradient(120% 90% at 75% -10%, #0d111a 0%, #090b11 55%, #06070b 100%);min-height:100dvh}
   .card{background:linear-gradient(180deg,var(--card1),var(--card2));border:1px solid var(--linea);border-radius:16px}
-  @keyframes botfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  @keyframes botpulse{0%,100%{box-shadow:0 10px 30px -8px rgba(240,206,62,.5),0 0 0 0 rgba(240,206,62,.32)}50%{box-shadow:0 10px 34px -6px rgba(240,206,62,.65),0 0 0 10px rgba(240,206,62,0)}}
   @keyframes dotblink{0%,100%{opacity:.35}50%{opacity:1}}
   @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 
@@ -38,9 +36,6 @@
   .says .who .live{width:7px;height:7px;border-radius:50%;background:var(--oro);opacity:.5}
   .says .who .live.on{opacity:1;animation:dotblink 1.1s ease-in-out infinite}
   .says .txt{font-size:14px;line-height:1.5;color:var(--txt)}
-  .mq-in{flex:1;background:#0e0f17;border:1px solid var(--linea);border-radius:11px;padding:11px 14px;color:var(--tinta);font-family:inherit;font-size:14px;outline:none;min-width:0}
-  .mq-go{background:var(--oro);color:#0a0a0d;border:none;border-radius:11px;padding:0 15px;font-size:16px;cursor:pointer}
-
   /* ════ DESKTOP ════ */
   .desktop{display:none;max-width:1400px;margin:0 auto}
   @media(min-width:760px){.desktop{display:flex}}
@@ -70,10 +65,6 @@
   .d-id .el{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#8b7a3a;font-weight:700;text-transform:uppercase}
   .d-id .nm{font-size:23px;font-weight:700;letter-spacing:-.02em;color:var(--tinta);margin-top:1px}
   .d-pill{display:flex;align-items:center;gap:8px;background:#11141b;border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:10px 15px;font-size:13px;color:var(--txt)}
-  .d-ask{display:flex;gap:10px;align-items:center;background:#0d1017;border:1px solid var(--linea);border-radius:13px;padding:5px 5px 5px 16px}
-  .d-ask svg{flex:none}
-  .d-ask input{flex:1;background:none;border:none;outline:none;color:var(--tinta);font-family:inherit;font-size:14px;padding:9px 0}
-  .d-ask .go{background:var(--oro);color:#0a0a0d;border:none;border-radius:9px;padding:9px 15px;font-size:15px;cursor:pointer}
   .d-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
   .kpi{padding:18px}
   .kpi.roi{border-color:rgba(240,206,62,.3);box-shadow:0 0 0 1px rgba(240,206,62,.06),0 10px 38px -16px rgba(240,206,62,.18)}
@@ -108,7 +99,7 @@
   .d-foot{display:flex;align-items:center;justify-content:center;gap:7px;padding:14px 0 4px;color:var(--oro);font-size:13.5px;font-weight:600;cursor:pointer}
 
   /* ════ MOBILE (app) ════ */
-  .mobile{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height:100dvh;overflow:hidden}
+  .mobile{display:flex;flex-direction:column;max-width:430px;margin:0 auto;min-height:100dvh;overflow-x:hidden}
   @media(min-width:760px){.mobile{display:none}}
   .m-scroll{flex:1;overflow-y:auto;padding-bottom:30px}
   .m-scroll::-webkit-scrollbar{display:none}
@@ -146,9 +137,6 @@
   .mc .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--gris-3);text-transform:uppercase}
   .mc .v{font-size:23px;font-weight:700;color:var(--tinta);margin-top:6px}
   .mc .s{font-size:11px;color:var(--gris-2);margin-top:3px}
-  .bot{position:fixed;right:max(20px,calc(50% - 215px + 20px));bottom:30px;display:flex;flex-direction:column;align-items:flex-end;gap:10px;z-index:6}
-  @media(min-width:760px){.bot{display:none}}
-
   .roi-v{color:var(--verde);background:rgba(70,201,138,.12)}
   .roi-m{color:var(--roi-medio);background:rgba(240,206,62,.1)}
   .roi-b{color:var(--roi-bajo);background:rgba(224,133,122,.12)}
@@ -167,6 +155,32 @@
   .refresh-btn{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--linea);background:transparent;cursor:pointer;color:var(--gris);transition:color .18s,border-color .18s;padding:0;flex:none;font:inherit;}
   .refresh-btn:hover{border-color:rgba(240,206,62,.5);color:var(--oro)}
   .refresh-btn.cargando svg{animation:spin360 .78s linear infinite}
+
+  /* Propuesta de hoy · botón verde + tooltip + badge */
+  .rbtn.verde{background:rgba(70,201,138,.12);color:var(--verde);border-color:rgba(70,201,138,.35)}
+  .rbtn.verde:hover{border-color:var(--verde)}
+  .rbtn .pp{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;padding:3px 7px;border-radius:6px;font-weight:700}
+  .rbtn .pp.pend{background:var(--verde);color:#0a0a0d}
+  .rbtn .pp.apro{background:#2E7DF2;color:#fff}
+  .rbtn .pp.vac{background:#2a2e3a;color:var(--gris-2)}
+  .rwrap{position:relative}
+  .tip{position:absolute;top:-4px;right:calc(100% + 14px);width:296px;background:linear-gradient(180deg,#0e121c,#080b11);border:1px solid var(--linea);border-radius:13px;padding:15px 16px;box-shadow:0 24px 60px -18px rgba(0,0,0,.85);opacity:0;visibility:hidden;transform:translateX(6px);transition:.16s ease;z-index:60;pointer-events:none}
+  .rwrap:hover .tip{opacity:1;visibility:visible;transform:none}
+  .tip:after{content:"";position:absolute;top:18px;right:-7px;width:12px;height:12px;background:#0e121c;border-right:1px solid var(--linea);border-top:1px solid var(--linea);transform:rotate(45deg)}
+  .tip .tlb{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;color:var(--verde);font-weight:700;text-transform:uppercase;margin-bottom:7px}
+  .tip .tt{font-weight:700;color:var(--tinta);font-size:14.5px;line-height:1.35;margin-bottom:7px}
+  .tip .tx{font-size:12.5px;line-height:1.55;color:var(--txt)}
+  .tip .tcta{margin-top:11px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);font-size:11px;color:var(--gris-2)}
+
+  /* ══ A+B · RESPONSIVE: sin scroll horizontal, contornos visibles ══ */
+  html,body{overflow-x:hidden;max-width:100%}
+  .m-scroll{overflow-x:hidden}
+  @media(max-width:759px){
+    /* contorno ligeramente más opaco para pantallas OLED oscuras */
+    .card{border-color:rgba(255,255,255,.14)}
+    /* D · número central del donut 10% más pequeño para no rozar el aro */
+    .m-donut .t{font-size:41px}
+  }
 </style>
 </head>
 <body>
@@ -177,7 +191,7 @@
   <div class="d-main">
   <div class="d-head">
     <div class="d-id">
-      <div class="orb-sm"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#0a0a0d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 8V4M9 3h6"/><circle cx="9" cy="13" r="1.1" fill="#0a0a0d"/><circle cx="15" cy="13" r="1.1" fill="#0a0a0d"/></svg><span class="lv"></span></div>
+      <div class="orb-sm"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#0a0a0d" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L6 18 H18 L21 7 L16 11 L12 5 L8 11 Z"/></svg><span class="lv"></span></div>
       <div><div class="el">cabina en la nube · solo lectura</div><div class="nm">Kairos Ai</div></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
@@ -188,11 +202,6 @@
     </div>
   </div>
   <div class="says"><span class="who"><span class="live"></span>KAIROS</span><span class="txt says-tx">Kairos en línea. Toca una métrica.</span></div>
-  <div class="d-ask">
-    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#F0CE3E" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7 L6 18 H18 L21 7 L16 11 L12 5 L8 11 Z"/></svg>
-    <input class="ask-in" type="text" placeholder="Háblale a Kairos… (ej. ¿cuánto he gastado?)" autocomplete="off">
-    <button class="go ask-go">🎙</button>
-  </div>
   <div class="d-kpis">
     <div class="card kpi"><div class="k">GASTO EN IA</div><div class="v v-gasto" style="color:var(--oro)">—</div><div class="s v-gasto-s">— tokens estimados</div></div>
     <div class="card kpi"><div class="k">VALOR GENERADO</div><div class="v v-valor" style="color:var(--verde)">—</div><div class="s">estimado del Motor</div></div>
@@ -217,8 +226,13 @@
   </div><!-- /d-main -->
   <div class="d-rail">
     <button class="rbtn on"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M3.5 14a8.5 8.5 0 0 1 17 0"/></svg>Cabina</button>
+    <div class="rwrap" id="r-prop-wrap">
+      <button class="rbtn verde" id="r-prop"><svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.5.4.8 1 .9 1.6h5.2c.1-.6.4-1.2.9-1.6A6 6 0 0 0 12 3z"/></svg>Propuesta de hoy<span class="pp vac" id="prop-badge">—</span></button>
+      <div class="tip" id="prop-tip"><div class="tlb">Mejora del día</div><div class="tt" id="tip-tt">Cargando…</div><div class="tx" id="tip-tx"></div><div class="tcta" id="tip-cta">Toca para leer la propuesta.</div></div>
+    </div>
     <div class="rsep">// funciones</div>
     <button class="rbtn" id="r-roi"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Proyectos · ROI</button>
+    <a href="cabina-nave.html" class="rbtn" style="text-decoration:none"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 19h20L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/></svg>🚀 Vista nave</a>
     <button class="rbtn" id="r-salir"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Bloquear cabina</button>
   </div>
 </div>
@@ -230,6 +244,15 @@
     <div id="roi-resumen" style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:14px;font-size:13px"></div>
     <div id="roi-lista"></div>
     <div style="margin-top:14px;font-size:11.5px;color:var(--gris-3);line-height:1.5">Para registrar o editar proyectos, usa la cabina en tierra (en tu PC). Aquí en la nube se muestran en solo lectura.</div>
+  </div>
+</div>
+
+<!-- modal: Propuesta de hoy (nube · solo lectura) -->
+<div class="modal" id="m-prop">
+  <div class="box" style="width:min(620px,96vw)">
+    <div class="mh"><div class="t">Propuesta de hoy</div><button class="x" id="m-prop-x">✕</button></div>
+    <div id="prop-body"></div>
+    <div style="margin-top:14px;font-size:11.5px;color:var(--gris-3);line-height:1.5">Para decidir, abre la cabina en tu PC.</div>
   </div>
 </div>
 
@@ -245,7 +268,6 @@
       </div>
     </div>
     <div class="says" style="margin:12px 22px 4px"><span class="who"><span class="live"></span>KAIROS</span><span class="txt says-tx">Kairos en línea. Toca una métrica.</span></div>
-    <div style="display:flex;gap:8px;margin:0 22px 4px"><input class="ask-in mq-in" type="text" placeholder="Háblale a Kairos…" autocomplete="off"><button class="go ask-go mq-go">🎙</button></div>
     <div class="m-lbl">Gasto en IA · ROI 7D <span class="v-roi" style="color:var(--oro)">—</span></div>
     <div class="m-donut">
       <svg viewBox="0 0 140 140" width="240" height="240"><circle cx="70" cy="70" r="52" fill="none" stroke="#191a24" stroke-width="13"/><g transform="rotate(-90 70 70)" id="m-segs"></g></svg>
@@ -324,7 +346,7 @@
       // limpia la frase de la barra de direcciones por seguridad
       try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
       return h;}
-    try{return localStorage.getItem('kairos_pass')||sessionStorage.getItem('kairos_pass')||'';}catch(e){return '';}
+    try{return localStorage.getItem('kairos_pass')||sessionStorage.getItem('kairos_pass')||(CFG.defaultPass||'');}catch(e){return CFG.defaultPass||'';}
   }
   var PASS=getPass();
   function b64d(s){var bin=atob(String(s||''));var u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u;}
@@ -386,19 +408,14 @@
     lock('Cabina bloqueada','Escribe tu frase para volver a entrar.',true,'');
   });
 
-  // ── voz (todo local en el navegador) ──
-  var vozOn=true,esVoice=null;
-  function loadV(){if(!('speechSynthesis'in window))return;var vs=speechSynthesis.getVoices();esVoice=vs.find(function(v){return /^es/i.test(v.lang);})||null;}
-  if('speechSynthesis'in window){loadV();speechSynthesis.onvoiceschanged=loadV;}
-  function hablar(t){if(!vozOn||!t||!('speechSynthesis'in window))return;try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=1;u.pitch=.95;if(esVoice)u.voice=esVoice;speechSynthesis.speak(u);}catch(e){}}
+  // ── Kairos responde por escrito (sin voz ni micrófono) ──
   var PARTES={};
-  function decir(s){var t=PARTES[s];if(t){setAll('says-tx',t);document.querySelectorAll('.says .live').forEach(function(l){l.classList.add('on');setTimeout(function(){l.classList.remove('on');},3500);});hablar(t);}}
-  var KW={gasto:['gasto','gaste','dinero','dolar','costo','caro'],actividad:['actividad','mensajes','activo','dias'],modelos:['modelo','opus','sonnet','fable','gpt','token'],skills:['skill','habilidad','agente'],memoria:['memoria','fuente','recordar'],valor:['valor','genera','roi','retorno'],roi:['roi','retorno','rentab']};
-  function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
-  function preguntar(v){var t=norm(v),best=null,bs=0;for(var s in KW){var c=0;KW[s].forEach(function(k){if(t.indexOf(norm(k))>=0)c++;});if(c>bs){bs=c;best=s;}}if(best)decir(best);}
-  document.querySelectorAll('.ask-go').forEach(function(b){b.addEventListener('click',function(){var inp=b.parentNode.querySelector('.ask-in');var v=inp.value.trim();if(v){preguntar(v);inp.value='';}});});
-  document.querySelectorAll('.ask-in').forEach(function(inp){inp.addEventListener('keydown',function(e){if(e.key==='Enter'){var v=this.value.trim();if(v){preguntar(v);this.value='';}}});});
-
+  function decir(s){
+    var t=s?PARTES[s]:null;
+    var msg=t||'Ese dato no está en el reporte de este corte. Consulta la cabina en tu PC para más detalle.';
+    setAll('says-tx',msg);
+    document.querySelectorAll('.says .live').forEach(function(l){l.classList.add('on');setTimeout(function(){l.classList.remove('on');},3500);});
+  }
   var SEC={'v-gasto':'gasto','v-valor':'valor','v-roi':'roi','v-act':'actividad','v-sk':'skills','v-mem':'memoria'};
   Object.keys(SEC).forEach(function(cls){document.querySelectorAll('.'+cls).forEach(function(v){var c=v.closest('.kpi,.mc');if(c){c.style.cursor='pointer';c.addEventListener('click',function(){decir(SEC[cls]);});}});});
 
@@ -496,6 +513,42 @@
     $('m-roi').addEventListener('click',function(e){if(e.target===$('m-roi'))$('m-roi').classList.remove('on');});
   }
 
+  // ── Propuesta de hoy (nube · solo lectura — lee d.propuestaHoy del snapshot) ──
+  var renderProp=function(){};
+  (function(){
+    if(!$('r-prop'))return;
+    var PROP=null;
+    function badge(est){var b=$('prop-badge');if(!b)return;
+      if(est==='PENDIENTE'){b.textContent='NUEVA';b.className='pp pend';}
+      else if(est==='APROBADA'){b.textContent='LISTA';b.className='pp apro';}
+      else{b.textContent='—';b.className='pp vac';}}
+    function tip(){var tt=$('tip-tt'),tx=$('tip-tx'),cta=$('tip-cta');if(!tt)return;
+      if(!PROP||!PROP.estado||PROP.estado==='VACIO'){
+        tt.textContent='Sin propuesta hoy';
+        tx.textContent='El agente Mejora Diaria propone una mejora al día. Cuando corra en la PC, aparecerá aquí en el siguiente snapshot publicado.';
+        cta.textContent='Actualiza el snapshot para ver la más reciente.';return;}
+      tt.textContent=PROP.titulo||'Mejora propuesta';
+      tx.textContent=PROP.que||(PROP.raw||'').slice(0,160);
+      cta.textContent=PROP.estado==='APROBADA'?'✓ Aprobada — se instala en la próxima corrida.':'Toca para leer la propuesta completa.';}
+    function fila(k,v){return v?'<div style="margin:10px 0"><div style="font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--gris-3);text-transform:uppercase;margin-bottom:3px">'+esc(k)+'</div><div style="font-size:13.5px;line-height:1.5;color:var(--txt)">'+esc(String(v).replace(/\*\*/g,''))+'</div></div>':'';}
+    function abrir(){var bd=$('prop-body');
+      if(!PROP||!PROP.estado||PROP.estado==='VACIO'){
+        bd.innerHTML='<div style="color:var(--gris-2);font-size:13.5px;line-height:1.6">Sin propuesta en este snapshot.<br>El agente de <b style="color:var(--verde)">Mejora Diaria</b> propone <b>una</b> mejora al día. Cuando corra en la PC, aparecerá en el siguiente corte publicado.</div>';
+      } else {
+        bd.innerHTML=(PROP.estado==='APROBADA'?'<div style="background:rgba(46,125,242,.12);border:1px solid rgba(46,125,242,.35);color:#9ec3ff;border-radius:10px;padding:10px 13px;font-size:12.5px;margin-bottom:14px">✓ Ya está <b>aprobada</b>. Se instalará en la próxima corrida del agente.</div>':'')
+          +'<div style="font-size:17px;font-weight:700;color:var(--tinta);margin-bottom:4px">'+esc(PROP.titulo||'Mejora propuesta')+'</div>'
+          +(PROP.fecha?'<div style="font-family:var(--mono);font-size:10px;color:var(--gris-3);margin-bottom:8px">'+esc(PROP.fecha)+'</div>':'')
+          +fila('Qué',PROP.que)+fila('Por qué',PROP.porque)+fila('Cómo se ejecuta',PROP.como)+fila('Archivos que tocaría',PROP.archivos)+fila('Riesgo',PROP.riesgo);
+      }
+      $('m-prop').classList.add('on');}
+    function cerrar(){$('m-prop').classList.remove('on');}
+    $('r-prop').addEventListener('click',abrir);
+    $('m-prop-x').addEventListener('click',cerrar);
+    $('m-prop').addEventListener('click',function(e){if(e.target===$('m-prop'))cerrar();});
+    renderProp=function(p){PROP=(p&&typeof p==='object'&&p.estado)?p:null;badge(PROP?PROP.estado:'');tip();};
+    renderProp(null);
+  })();
+
   // ── ciclo de carga ──
   function cargar(){
     window.__fromCache=false;
@@ -507,10 +560,10 @@
       if(d==='BAD_PASS'){ lock('Frase incorrecta','Esa frase no descifra el corte. Revísala e intenta otra vez.',true,'✕ La frase no coincide.'); return; }
       if(d){
         // Datos frescos o desde caché del SW
-        unlock(); render(d); renderProy(d); mostrarOffline(window.__fromCache);
+        unlock(); render(d); renderProy(d); renderProp(d.propuestaHoy||null); mostrarOffline(window.__fromCache);
       } else if(window.__SNAP){
         // Red caída Y el SW no tiene caché, pero tenemos el último corte en memoria
-        unlock(); render(window.__SNAP); renderProy(window.__SNAP); mostrarOffline(true);
+        unlock(); render(window.__SNAP); renderProy(window.__SNAP); renderProp(window.__SNAP.propuestaHoy||null); mostrarOffline(true);
       } else {
         // Sin datos en absoluto
         unlock(); offline(); mostrarOffline(!navigator.onLine);
@@ -532,6 +585,7 @@
       console.warn('[KAIROS SW]',e);
     });
   }
+
 })();
 </script>
 </body>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#02050f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KAIROS Nave">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>KAIROS · Nave (nube · cifrada)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;background:#02050f;overflow:hidden;font-family:'Rajdhani',sans-serif}
+  @keyframes kbreathe{0%,100%{opacity:.55}50%{opacity:1}}
+  @keyframes kblink{0%,100%{opacity:.25}50%{opacity:1}}
+  @keyframes spin360{to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+  .modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,5,15,.88);backdrop-filter:blur(6px)}
+  .modal.on{display:flex}
+  .modal .box{width:min(420px,94vw);background:linear-gradient(180deg,#0c1a32,#060d1e);border:1px solid rgba(90,160,215,0.24);border-radius:16px;padding:22px;text-align:center}
+  .gate-in{width:100%;background:#040a18;border:1px solid rgba(90,160,215,0.22);border-radius:10px;padding:11px 13px;color:#eaf1ff;font:500 14px Rajdhani,sans-serif;outline:none}
+  .gate-in:focus{border-color:#f0a93a}
+  .pbtn{background:linear-gradient(180deg,#f0a93a,#e09528);color:#0a1124;border:none;border-radius:9px;padding:9px 16px;font:700 13px Rajdhani,sans-serif;cursor:pointer;white-space:nowrap}
+  .lock-pill{display:flex;align-items:center;gap:6px;background:rgba(63,209,126,.1);border:1px solid rgba(63,209,126,.3);color:#3fd17e;border-radius:999px;padding:5px 10px;font:700 10px 'Space Mono',monospace;letter-spacing:.04em;white-space:nowrap}
+  .offline-badge{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:200;display:none;align-items:center;gap:7px;background:#1a0e0b;border:1px solid rgba(224,133,122,.55);border-radius:999px;padding:7px 15px 7px 12px;font:400 11.5px 'Space Mono',monospace;color:#e09070;box-shadow:0 4px 22px rgba(0,0,0,.65);white-space:nowrap;pointer-events:none;letter-spacing:.02em}
+  .offline-badge.on{display:flex}
+  .spin-el{width:14px;height:14px;flex:none;border:2px solid rgba(240,169,58,.2);border-top-color:#f0a93a;border-radius:50%;animation:spin360 .78s linear infinite}
+</style>
+</head>
+<body>
+<div class="offline-badge" id="offline-badge">📴&nbsp;datos en caché (sin conexión)</div>
+
+<div style="position:fixed;inset:0;background:#02050f;display:grid;place-items:center;overflow:hidden">
+<div id="stage" style="position:absolute;left:50%;top:50%;width:1920px;height:1180px;transform:translate(-50%,-50%);transform-origin:center center;background:radial-gradient(125% 90% at 50% 32%,#0d2147 0%,#071633 44%,#03091c 78%,#020611 100%);overflow:hidden">
+
+  <div style="position:absolute;left:0;right:0;bottom:-60px;height:360px;background:radial-gradient(62% 100% at 50% 100%,rgba(240,150,55,0.22),rgba(240,150,55,0.05) 55%,transparent 73%);pointer-events:none"></div>
+  <div style="position:absolute;left:0;right:0;top:-60px;height:560px;background:radial-gradient(72% 100% at 50% 0%,rgba(70,185,235,0.13),rgba(70,150,220,0.05) 48%,transparent 72%);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;box-shadow:inset 0 0 220px 60px rgba(0,0,0,0.65);pointer-events:none"></div>
+  <div style="position:absolute;inset:0;opacity:.5;background:repeating-linear-gradient(0deg,rgba(120,170,230,0.05) 0px,rgba(120,170,230,0.05) 1px,transparent 1px,transparent 3px);mix-blend-mode:overlay;pointer-events:none"></div>
+
+  <!-- LEFT STRUT -->
+  <div style="position:absolute;top:0;bottom:0;left:0;width:26px;background:linear-gradient(90deg,#0a1426,#10203c 60%,#060e1e);border-right:1px solid rgba(120,160,220,0.12);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:30px 0;pointer-events:none">
+    <div style="width:7px;height:7px;border-radius:50%;background:#f0a93a;box-shadow:0 0 8px #f0a93a"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:rgba(120,160,220,0.4)"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:#3fd17e;box-shadow:0 0 8px #3fd17e;animation:kbreathe 3s ease-in-out infinite"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:rgba(120,160,220,0.4)"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:#f0a93a;box-shadow:0 0 8px #f0a93a"></div>
+  </div>
+  <!-- RIGHT STRUT -->
+  <div style="position:absolute;top:0;bottom:0;right:0;width:26px;background:linear-gradient(270deg,#0a1426,#10203c 60%,#060e1e);border-left:1px solid rgba(120,160,220,0.12);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:30px 0;pointer-events:none">
+    <div style="width:7px;height:7px;border-radius:50%;background:#f0a93a;box-shadow:0 0 8px #f0a93a"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:rgba(120,160,220,0.4)"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:#5b9bf0;box-shadow:0 0 8px #5b9bf0;animation:kbreathe 4s ease-in-out infinite"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:rgba(120,160,220,0.4)"></div>
+    <div style="width:7px;height:7px;border-radius:50%;background:#f0a93a;box-shadow:0 0 8px #f0a93a"></div>
+  </div>
+
+  <!-- CONTENT -->
+  <div style="position:absolute;inset:0;padding:26px 50px 22px 50px;display:flex;flex-direction:column;gap:14px">
+
+    <!-- BANNER -->
+    <div style="flex:none;display:flex;flex-direction:column;padding:11px 13px 12px;border-radius:16px;background:linear-gradient(180deg,#0c1a32,#060d1e);border:1px solid rgba(90,160,215,0.24);box-shadow:0 0 0 1px rgba(0,0,0,0.5),0 0 36px rgba(70,180,232,0.16),inset 0 2px 0 rgba(150,205,255,0.13),inset 0 -12px 30px rgba(0,0,0,0.4)">
+
+      <div style="height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 6px 11px;border-bottom:1px solid rgba(90,150,210,0.18)">
+        <div style="display:flex;align-items:center;gap:12px;min-width:340px">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="width:8px;height:8px;border-radius:2px;background:#3fd17e;box-shadow:0 0 8px #3fd17e;animation:kbreathe 2.4s ease-in-out infinite"></span>
+            <span style="font:700 12px 'Space Mono',monospace;letter-spacing:.12em;color:#7d93bd">SYS://NAVE-01</span>
+          </div>
+          <span id="corte-chip" style="font:400 11px 'Space Mono',monospace;color:#56688c">CORTE —</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <svg width="20" height="22" viewBox="0 0 20 22"><path d="M10 1 19 6v10l-9 5-9-5V6z" fill="none" stroke="#f0a93a" stroke-width="1.4"/><path d="M6 11l3 3 5-6" fill="none" stroke="#f0a93a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font:700 19px 'Rajdhani';letter-spacing:.2em;color:#f4b757">KAIROS<span style="color:#7d93bd;font-weight:500">-AGENT</span></span>
+          <span style="width:1px;height:20px;background:rgba(120,160,220,0.25)"></span>
+          <span id="mode-label" style="font:600 12px 'Rajdhani';letter-spacing:.18em;color:#9fb3d6">NUBE · SOLO LECTURA</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;min-width:340px;justify-content:flex-end">
+          <div id="spin-top" style="display:none" class="spin-el"></div>
+          <a href="cabina-drive.html" style="display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:7px;background:rgba(91,155,240,0.1);border:1px solid rgba(91,155,240,0.28);color:#9fb3d6;font:600 10px 'Space Mono',monospace;letter-spacing:.06em;text-decoration:none;white-space:nowrap">💼 FINANZAS</a>
+          <div class="lock-pill">🔒 cifrado</div>
+          <span id="clock" style="font:700 14px 'Space Mono',monospace;color:#9fb3d6;letter-spacing:.06em">00:00:00</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <span style="width:6px;height:6px;border-radius:50%;background:#3fd17e;box-shadow:0 0 6px #3fd17e"></span>
+            <span style="width:6px;height:6px;border-radius:50%;background:#f0a93a"></span>
+            <span style="width:6px;height:6px;border-radius:50%;background:rgba(120,160,220,0.35)"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI ROW -->
+      <div style="height:126px;display:grid;grid-template-columns:1.45fr 1fr 1fr 1fr 1.2fr 1fr;gap:11px;padding:11px;border-radius:15px;background:linear-gradient(180deg,#0c1a32,#060d1e);border:1px solid rgba(90,160,215,0.24);box-shadow:0 0 0 1px rgba(0,0,0,0.5),0 0 34px rgba(70,180,232,0.16),inset 0 2px 0 rgba(150,205,255,0.13),inset 0 -10px 30px rgba(0,0,0,0.4)">
+
+        <div style="position:relative;border:1px solid rgba(229,169,58,0.42);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.82),rgba(6,14,34,0.9));padding:13px 16px;display:flex;align-items:center;gap:14px;overflow:hidden">
+          <div style="position:absolute;left:0;top:0;width:24px;height:24px;border-top:2px solid #f0a93a;border-left:2px solid #f0a93a;border-radius:11px 0 0 0"></div>
+          <div style="position:relative;width:60px;height:60px;flex:none">
+            <svg width="60" height="60" viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="none" stroke="rgba(120,150,210,0.16)" stroke-width="5"/><circle id="salud-ring" cx="32" cy="32" r="27" fill="none" stroke="#f0a93a" stroke-width="5" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="84.8" transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 4px rgba(240,169,58,0.6))"/></svg>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span id="kpi-salud" style="font:700 22px 'Rajdhani';color:#f4b757;line-height:1">—</span></div>
+          </div>
+          <div>
+            <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase;white-space:nowrap">Estado general</div>
+            <div id="kpi-salud-txt" style="font:700 18px 'Rajdhani';color:#3fd17e;margin-top:3px;letter-spacing:.04em">—</div>
+            <div style="font:400 11px 'Space Mono',monospace;color:#56688c;margin-top:2px">índice de salud</div>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(229,169,58,0.42);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.82),rgba(6,14,34,0.9));padding:13px 16px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Racha activa</div>
+          <div style="display:flex;align-items:baseline;gap:7px;margin-top:4px"><span id="kpi-racha" style="font:700 30px 'Rajdhani';color:#eaf1ff;line-height:1">—</span><span style="font:500 13px 'Rajdhani';color:#9fb3d6">días</span></div>
+          <div id="kpi-racha-sub" style="font:400 11px 'Space Mono',monospace;color:#56688c;margin-top:3px">con actividad</div>
+        </div>
+
+        <div style="border:1px solid rgba(229,169,58,0.42);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.82),rgba(6,14,34,0.9));padding:13px 16px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Skills activas</div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px"><span id="kpi-skills" style="font:700 30px 'Rajdhani';color:#f4b757;line-height:1">—</span></div>
+          <div style="height:4px;border-radius:3px;background:rgba(120,150,210,0.18);margin-top:7px;overflow:hidden"><div id="kpi-skills-bar" style="width:0%;height:100%;background:linear-gradient(90deg,#f0a93a,#f4c777);border-radius:3px;transition:width .6s ease"></div></div>
+        </div>
+
+        <div style="border:1px solid rgba(229,169,58,0.42);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.82),rgba(6,14,34,0.9));padding:13px 16px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Memoria</div>
+          <div id="kpi-nodos" style="font:700 30px 'Rajdhani';color:#eaf1ff;line-height:1;margin-top:4px">—</div>
+          <div id="kpi-nodos-sub" style="font:400 11px 'Space Mono',monospace;color:#56688c;margin-top:3px">archivos</div>
+        </div>
+
+        <div style="border:1px solid rgba(229,169,58,0.42);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.82),rgba(6,14,34,0.9));padding:13px 16px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">ROI 7d</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:4px"><span id="roi-dot" style="width:9px;height:9px;border-radius:50%;background:#3fd17e;box-shadow:0 0 9px #3fd17e;animation:kbreathe 2.6s ease-in-out infinite;flex:none"></span><span id="kpi-roi" style="font:700 24px 'Rajdhani';color:#3fd17e;line-height:1">—</span></div>
+          <div id="kpi-roi-sub" style="font:400 11px 'Space Mono',monospace;color:#56688c;margin-top:4px">objetivo 1.0×</div>
+        </div>
+
+        <div style="border:1px solid rgba(229,169,58,0.42);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.82),rgba(6,14,34,0.9));padding:13px 16px;display:flex;flex-direction:column;justify-content:center">
+          <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Ventana de uso</div>
+          <div style="font:700 30px 'Rajdhani';color:#eaf1ff;line-height:1;margin-top:4px"><span id="kpi-ventana">—</span><span style="font-size:18px;color:#9fb3d6">%</span></div>
+          <div id="kpi-ventana-sub" style="font:400 11px 'Space Mono',monospace;color:#56688c;margin-top:3px">plan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div style="flex:none;height:472px;display:grid;grid-template-columns:228px 290px 1fr 360px;gap:12px;padding:11px;border-radius:16px;background:linear-gradient(180deg,#0c1a32,#05101f 70%);border:1px solid rgba(90,165,220,0.26);box-shadow:0 0 0 1px rgba(0,0,0,0.5),0 0 46px rgba(70,185,235,0.18),inset 0 2px 0 rgba(150,205,255,0.13),inset 0 -16px 40px rgba(0,0,0,0.42)">
+
+      <!-- COL 1: nav + sistema -->
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div style="flex:none;border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:15px 13px">
+          <div style="font:600 10px 'Rajdhani';letter-spacing:.2em;color:#f0a93a;text-transform:uppercase;margin-bottom:11px">// Operación</div>
+          <div style="display:flex;flex-direction:column;gap:5px;font:600 15px Rajdhani;color:#9fb3d6">
+            <div style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px;background:linear-gradient(90deg,#f0a93a,#f4c069);color:#0a1124;box-shadow:0 4px 16px rgba(240,169,58,0.32)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Inicio</span></div>
+            <div style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg><span>Skills</span></div>
+            <div style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a4 4 0 0 0-4 4 3 3 0 0 0-2 5 3 3 0 0 0 2 5 4 4 0 0 0 8 0 3 3 0 0 0 2-5 3 3 0 0 0-2-5 4 4 0 0 0-4-4z"/></svg><span>Memoria</span></div>
+            <div style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:9px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg><span>Actividad</span></div>
+          </div>
+        </div>
+        <div style="flex:1;border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:15px 13px;display:flex;flex-direction:column">
+          <div style="font:600 10px 'Rajdhani';letter-spacing:.2em;color:#f0a93a;text-transform:uppercase;margin-bottom:10px">// Sistema</div>
+          <div id="sys-val" style="font:700 20px 'Rajdhani';color:#3fd17e;letter-spacing:.04em">—</div>
+          <div id="sys-sub" style="font:400 11px 'Space Mono',monospace;color:#56688c;margin-top:6px;line-height:1.5">esperando corte…</div>
+          <div style="margin-top:auto;padding-top:12px">
+            <button id="btn-bloquear" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:9px;background:rgba(120,160,220,0.06);border:1px solid rgba(120,160,220,0.18);color:#7d93bd;font:600 13px Rajdhani,sans-serif;cursor:pointer;width:100%">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Bloquear nave
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 2: skills -->
+      <div style="border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:15px 14px;display:flex;flex-direction:column;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+          <div style="font:600 11px 'Rajdhani';letter-spacing:.18em;color:#f0a93a;text-transform:uppercase">Skills</div>
+          <span id="skills-count" style="font:400 10px 'Space Mono',monospace;color:#56688c">—</span>
+        </div>
+        <div style="font:600 9px 'Rajdhani';letter-spacing:.16em;color:#56688c;text-transform:uppercase;margin-bottom:8px">Más usadas (7d)</div>
+        <div id="skills-list" style="display:flex;flex-direction:column;gap:7px;overflow:auto"></div>
+        <div style="margin-top:auto;padding-top:12px;font:600 11px 'Rajdhani';letter-spacing:.06em;color:#f0a93a">Datos del snapshot</div>
+      </div>
+
+      <!-- COL 3: memory graph -->
+      <div style="position:relative;border:1px solid rgba(110,150,210,0.18);border-radius:11px;background:radial-gradient(120% 120% at 50% 40%,#061328 0%,#040c1e 70%,#030917 100%);overflow:hidden;display:flex;flex-direction:column">
+        <div style="position:absolute;left:0;top:0;width:26px;height:26px;border-top:2px solid #f0a93a;border-left:2px solid #f0a93a;border-radius:11px 0 0 0;opacity:.7"></div>
+        <div style="position:absolute;right:0;bottom:0;width:26px;height:26px;border-bottom:2px solid #f0a93a;border-right:2px solid #f0a93a;border-radius:0 0 11px 0;opacity:.7"></div>
+        <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;padding:15px 18px 0">
+          <div>
+            <div style="font:600 13px 'Rajdhani';letter-spacing:.16em;color:#eaf1ff;text-transform:uppercase">Memoria semántica</div>
+            <div style="font:500 10px 'Rajdhani';letter-spacing:.2em;color:#f0a93a;text-transform:uppercase;margin-top:3px">Grafo orbital</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font:700 18px 'Rajdhani';color:#f4b757;line-height:1"><span id="mem-nodos">—</span> <span style="font:500 10px 'Rajdhani';color:#7d93bd">archivos</span></div>
+            <div style="font:700 18px 'Rajdhani';color:#eaf1ff;line-height:1;margin-top:5px"><span id="mem-rel">—</span> <span style="font:500 10px 'Rajdhani';color:#7d93bd">vectores</span></div>
+          </div>
+        </div>
+        <div style="flex:1;position:relative;min-height:0">
+          <canvas id="graph" style="width:100%;height:100%;display:block"></canvas>
+        </div>
+        <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:0 18px 14px">
+          <span style="font:500 11px 'Rajdhani';letter-spacing:.1em;color:#9fb3d6;border:1px solid rgba(120,160,220,0.25);border-radius:7px;padding:5px 11px;background:rgba(10,20,42,0.6)">Vista: Global</span>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span id="mem-fresh" style="font:400 11px 'Space Mono',monospace;color:#56688c">frescura —</span>
+            <span style="font:600 11px 'Rajdhani';letter-spacing:.06em;color:#3fd17e">Persistencia 100%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 4: gasto + actividad + valor + barras -->
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div style="flex:none;border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:13px 15px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Gasto en IA</span><span style="font:400 10px 'Space Mono',monospace;color:#56688c">estimado · 7d</span></div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-top:4px">
+            <div id="gasto-total" style="font:700 32px 'Rajdhani';color:#f4b757;line-height:1">—</div>
+            <svg width="170" height="46" viewBox="0 0 250 56" preserveAspectRatio="none" style="overflow:visible"><defs><linearGradient id="spendG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0a93a" stop-opacity="0.35"/><stop offset="1" stop-color="#f0a93a" stop-opacity="0"/></linearGradient></defs><path id="spark-fill" d="" fill="url(#spendG)"/><path id="spark-line" d="" fill="none" stroke="#f0a93a" stroke-width="2" stroke-linecap="round" style="filter:drop-shadow(0 0 4px rgba(240,169,58,0.5))"/></svg>
+          </div>
+        </div>
+        <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;gap:13px">
+          <div style="border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:12px 14px">
+            <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Gasto hoy</div>
+            <div id="gasto-hoy" style="font:700 26px 'Rajdhani';color:#3fd17e;line-height:1;margin-top:4px">—</div>
+            <div style="font:400 10px 'Space Mono',monospace;color:#56688c;margin-top:3px">último día</div>
+          </div>
+          <div style="border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:12px 14px">
+            <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Mensajes</div>
+            <div id="act-7d" style="font:700 26px 'Rajdhani';color:#eaf1ff;line-height:1;margin-top:4px">—</div>
+            <div id="act-sub" style="font:400 10px 'Space Mono',monospace;color:#56688c;margin-top:3px">7 días</div>
+          </div>
+        </div>
+        <div style="flex:none;border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:13px 15px">
+          <span style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Valor generado 7d</span>
+          <div id="valor-7d" style="font:700 28px 'Space Mono',monospace;color:#eaf1ff;line-height:1;letter-spacing:.02em;margin-top:7px">—</div>
+        </div>
+        <div style="flex:1;border:1px solid rgba(110,150,210,0.16);border-radius:11px;background:linear-gradient(155deg,rgba(13,26,56,0.8),rgba(6,14,34,0.9));padding:13px 15px;display:flex;flex-direction:column">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#7d93bd;text-transform:uppercase">Mensajes por día</span><span id="dias-total" style="font:700 13px 'Rajdhani';color:#5b9bf0">—</span></div>
+          <div id="dias-bars" style="flex:1;display:flex;align-items:flex-end;gap:9px;margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSOLE MID -->
+    <div style="flex:none;height:236px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;padding:11px;border-radius:15px;background:linear-gradient(180deg,#0a1729,#050d1c);border:1px solid rgba(80,150,205,0.22);box-shadow:0 0 0 1px rgba(0,0,0,0.5),0 0 30px rgba(65,165,220,0.13),inset 0 2px 0 rgba(140,195,250,0.1),inset 0 -10px 26px rgba(0,0,0,0.42)">
+
+      <div style="border:1px solid rgba(110,150,210,0.15);border-radius:11px;background:linear-gradient(155deg,rgba(11,22,48,0.78),rgba(5,12,30,0.9));padding:13px 15px;display:flex;flex-direction:column">
+        <div style="font:600 11px 'Rajdhani';letter-spacing:.16em;color:#f0a93a;text-transform:uppercase">Automatizaciones</div>
+        <div id="autos-sub" style="font:400 10px 'Space Mono',monospace;color:#56688c;margin:2px 0 11px">estado de flujos</div>
+        <div id="autos-list" style="display:flex;flex-direction:column;gap:8px;overflow:auto"></div>
+      </div>
+
+      <div style="border:1px solid rgba(110,150,210,0.15);border-radius:11px;background:linear-gradient(155deg,rgba(11,22,48,0.78),rgba(5,12,30,0.9));padding:13px 15px;display:flex;flex-direction:column">
+        <div style="font:600 11px 'Rajdhani';letter-spacing:.16em;color:#f0a93a;text-transform:uppercase">Modelos · gasto</div>
+        <div id="stack-sub" style="font:400 10px 'Space Mono',monospace;color:#56688c;margin:2px 0 11px">por modelo</div>
+        <div id="stack-list" style="display:flex;flex-direction:column;gap:9px;overflow:auto"></div>
+      </div>
+
+      <div style="border:1px solid rgba(110,150,210,0.15);border-radius:11px;background:linear-gradient(155deg,rgba(11,22,48,0.78),rgba(5,12,30,0.9));padding:13px 15px;display:flex;flex-direction:column">
+        <div style="font:600 11px 'Rajdhani';letter-spacing:.16em;color:#f0a93a;text-transform:uppercase">Proyectos activos</div>
+        <div id="proy-sub" style="font:400 10px 'Space Mono',monospace;color:#56688c;margin:2px 0 11px">por actividad</div>
+        <div id="proy-list" style="display:flex;flex-direction:column;gap:8px;overflow:auto"></div>
+      </div>
+
+      <div style="border:1px solid rgba(110,150,210,0.15);border-radius:11px;background:linear-gradient(155deg,rgba(11,22,48,0.78),rgba(5,12,30,0.9));padding:13px 14px;display:flex;flex-direction:column;align-items:center">
+        <div style="font:600 10px 'Rajdhani';letter-spacing:.16em;color:#f0a93a;text-transform:uppercase;align-self:flex-start">Tokens</div>
+        <div style="position:relative;width:82px;height:82px;margin-top:8px">
+          <svg width="82" height="82" viewBox="0 0 96 96"><circle cx="48" cy="48" r="40" fill="none" stroke="rgba(120,150,210,0.14)" stroke-width="7"/><circle id="tok-ring" cx="48" cy="48" r="40" fill="none" stroke="#f0a93a" stroke-width="7" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="60" transform="rotate(-90 48 48)" style="filter:drop-shadow(0 0 5px rgba(240,169,58,0.6))"/></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span id="tok-total" style="font:700 20px 'Rajdhani';color:#f4b757;line-height:1">—</span><span style="font:500 8px 'Rajdhani';letter-spacing:.1em;color:#7d93bd">TOTAL</span></div>
+        </div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:6px;margin-top:14px">
+          <div style="display:flex;justify-content:space-between;font:500 10px 'Rajdhani';color:#9fb3d6"><span>Entrada</span><span id="tok-in" style="font-family:'Space Mono';color:#cdd9f0">—</span></div>
+          <div style="display:flex;justify-content:space-between;font:500 10px 'Rajdhani';color:#9fb3d6"><span>Salida</span><span id="tok-out" style="font-family:'Space Mono';color:#cdd9f0">—</span></div>
+          <div style="display:flex;justify-content:space-between;font:500 10px 'Rajdhani';color:#9fb3d6"><span>Caché</span><span id="tok-cache" style="font-family:'Space Mono';color:#cdd9f0">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSOLE BOTTOM -->
+    <div style="flex:1;min-height:0;display:flex;align-items:stretch;gap:13px">
+      <!-- knob panel L -->
+      <div style="flex:none;width:122px;border:1px solid rgba(155,125,75,0.26);border-radius:11px;background:linear-gradient(180deg,#181308,#0b0905);box-shadow:inset 0 2px 0 rgba(240,185,115,0.13),0 0 24px rgba(240,150,55,0.09);padding:14px 8px;display:flex;flex-direction:column;justify-content:center;gap:13px">
+        <div style="display:flex;justify-content:space-around">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#4a5572,#1a2438 58%,#0b1222);border:1px solid rgba(150,175,215,0.25);box-shadow:0 5px 11px rgba(0,0,0,0.55),inset 0 1px 1px rgba(200,220,255,0.18)"><span style="position:absolute;left:50%;top:5px;transform:translateX(-50%);width:3px;height:15px;border-radius:2px;background:#f0a93a;box-shadow:0 0 6px #f0a93a"></span></div><span style="font:400 8px 'Space Mono',monospace;letter-spacing:.1em;color:#56688c">SIGNAL</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#4a5572,#1a2438 58%,#0b1222);border:1px solid rgba(150,175,215,0.25);box-shadow:0 5px 11px rgba(0,0,0,0.55),inset 0 1px 1px rgba(200,220,255,0.18)"><span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(40deg);transform-origin:center;width:3px;height:30px;border-radius:2px;background:linear-gradient(#3fd17e,transparent);box-shadow:0 0 6px #3fd17e"></span></div><span style="font:400 8px 'Space Mono',monospace;letter-spacing:.1em;color:#56688c">GAIN</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-around">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#4a5572,#1a2438 58%,#0b1222);border:1px solid rgba(150,175,215,0.25);box-shadow:0 5px 11px rgba(0,0,0,0.55),inset 0 1px 1px rgba(200,220,255,0.18)"><span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-55deg);transform-origin:center;width:3px;height:30px;border-radius:2px;background:linear-gradient(#5b9bf0,transparent);box-shadow:0 0 6px #5b9bf0"></span></div><span style="font:400 8px 'Space Mono',monospace;letter-spacing:.1em;color:#56688c">SYNC</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#4a5572,#1a2438 58%,#0b1222);border:1px solid rgba(150,175,215,0.25);box-shadow:0 5px 11px rgba(0,0,0,0.55),inset 0 1px 1px rgba(200,220,255,0.18)"><span style="position:absolute;left:50%;top:5px;transform:translateX(-50%);width:3px;height:15px;border-radius:2px;background:#f0a93a;box-shadow:0 0 6px #f0a93a"></span></div><span style="font:400 8px 'Space Mono',monospace;letter-spacing:.1em;color:#56688c">FREQ</span></div>
+        </div>
+      </div>
+      <!-- telemetría -->
+      <div style="flex:1;border:1px solid rgba(110,150,210,0.15);border-radius:11px;background:linear-gradient(155deg,rgba(11,22,48,0.78),rgba(5,12,30,0.9));padding:13px 16px;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font:600 11px 'Rajdhani';letter-spacing:.16em;color:#f0a93a;text-transform:uppercase">Telemetría de consola</span>
+          <span style="display:flex;align-items:center;gap:5px;font:400 10px 'Space Mono',monospace;color:#3fd17e"><span style="width:6px;height:6px;border-radius:50%;background:#3fd17e;animation:kblink 1.2s infinite"></span>STREAM</span>
+        </div>
+        <div style="display:flex;gap:18px;flex:1;margin-top:10px">
+          <div style="flex:1.4;position:relative;min-height:0">
+            <svg width="100%" height="100%" viewBox="0 0 260 90" preserveAspectRatio="none" style="overflow:visible"><line x1="0" y1="22" x2="260" y2="22" stroke="rgba(120,160,220,0.1)" stroke-width="1"/><line x1="0" y1="56" x2="260" y2="56" stroke="rgba(120,160,220,0.1)" stroke-width="1"/><path d="M0,60 C18,58 26,40 44,42 C64,44 70,66 92,64 C112,62 120,30 142,34 C164,38 172,54 196,50 C218,46 226,28 260,32" fill="none" stroke="#46cfe0" stroke-width="2" stroke-linecap="round" style="filter:drop-shadow(0 0 4px rgba(70,207,224,0.5))"/></svg>
+          </div>
+          <div style="flex:none;width:170px;display:flex;flex-direction:column;justify-content:center;gap:9px">
+            <div><div style="display:flex;justify-content:space-between;font:500 10px 'Rajdhani';color:#9fb3d6;margin-bottom:3px"><span>CORE</span><span id="telA" style="font-family:'Space Mono';color:#cdd9f0">—</span></div><div style="height:5px;border-radius:3px;background:rgba(120,150,210,0.15);overflow:hidden"><div id="telAbar" style="width:50%;height:100%;background:linear-gradient(90deg,#46cfe0,#5b9bf0);border-radius:3px;transition:width .6s ease"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px 'Rajdhani';color:#9fb3d6;margin-bottom:3px"><span>FLUX</span><span id="telB" style="font-family:'Space Mono';color:#cdd9f0">—</span></div><div style="height:5px;border-radius:3px;background:rgba(120,150,210,0.15);overflow:hidden"><div id="telBbar" style="width:50%;height:100%;background:linear-gradient(90deg,#f0a93a,#f4c777);border-radius:3px;transition:width .6s ease"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px 'Rajdhani';color:#9fb3d6;margin-bottom:3px"><span>SYNC</span><span id="telC" style="font-family:'Space Mono';color:#cdd9f0">—</span></div><div style="height:5px;border-radius:3px;background:rgba(120,150,210,0.15);overflow:hidden"><div id="telCbar" style="width:50%;height:100%;background:linear-gradient(90deg,#3fd17e,#46cfe0);border-radius:3px;transition:width .6s ease"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- knob panel R -->
+      <div style="flex:none;width:122px;border:1px solid rgba(155,125,75,0.26);border-radius:11px;background:linear-gradient(180deg,#181308,#0b0905);box-shadow:inset 0 2px 0 rgba(240,185,115,0.13),0 0 24px rgba(240,150,55,0.09);padding:14px 8px;display:flex;flex-direction:column;justify-content:center;gap:13px">
+        <div style="display:flex;justify-content:space-around">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#4a5572,#1a2438 58%,#0b1222);border:1px solid rgba(150,175,215,0.25);box-shadow:0 5px 11px rgba(0,0,0,0.55),inset 0 1px 1px rgba(200,220,255,0.18)"><span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(25deg);transform-origin:center;width:3px;height:30px;border-radius:2px;background:linear-gradient(#f0a93a,transparent);box-shadow:0 0 6px #f0a93a"></span></div><span style="font:400 8px 'Space Mono',monospace;letter-spacing:.1em;color:#56688c">PWR</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="position:relative;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#4a5572,#1a2438 58%,#0b1222);border:1px solid rgba(150,175,215,0.25);box-shadow:0 5px 11px rgba(0,0,0,0.55),inset 0 1px 1px rgba(200,220,255,0.18)"><span style="position:absolute;left:50%;top:5px;transform:translateX(-50%);width:3px;height:15px;border-radius:2px;background:#46cfe0;box-shadow:0 0 6px #46cfe0"></span></div><span style="font:400 8px 'Space Mono',monospace;letter-spacing:.1em;color:#56688c">BIAS</span></div>
+        </div>
+        <div style="display:flex;justify-content:center;gap:7px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#f0a93a;box-shadow:0 0 6px #f0a93a"></span>
+          <span style="width:8px;height:8px;border-radius:50%;background:#3fd17e;box-shadow:0 0 6px #3fd17e;animation:kbreathe 2s infinite"></span>
+          <span style="width:8px;height:8px;border-radius:50%;background:rgba(120,160,220,0.4)"></span>
+          <span style="width:8px;height:8px;border-radius:50%;background:#46cfe0;box-shadow:0 0 6px #46cfe0"></span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /stage -->
+</div>
+
+<!-- GATE: candado de frase secreta -->
+<div class="modal" id="gate">
+  <div class="box">
+    <div style="font-size:42px;line-height:1">🔱</div>
+    <div id="gate-t" style="font:700 19px 'Rajdhani',sans-serif;color:#eaf1ff;margin:10px 0 5px">Nave cifrada</div>
+    <div id="gate-x" style="font:400 13px 'Rajdhani',sans-serif;color:#7d93bd;line-height:1.55;margin-bottom:16px">Escribe tu frase secreta para descifrar tus datos. Nunca sale de este navegador.</div>
+    <div id="gate-form" style="display:flex;gap:8px">
+      <input id="gate-pass" class="gate-in" type="password" placeholder="Tu frase secreta" autocomplete="current-password">
+      <button class="pbtn" id="gate-go">Entrar</button>
+    </div>
+    <label style="display:flex;align-items:center;gap:7px;justify-content:center;margin-top:13px;font:400 12px 'Rajdhani',sans-serif;color:#7d93bd;cursor:pointer">
+      <input id="gate-rem" type="checkbox" style="accent-color:#f0a93a"> Recordar en este equipo
+    </label>
+    <div id="gate-err" style="font:400 12px 'Rajdhani',sans-serif;color:#e09070;margin-top:10px;min-height:16px"></div>
+  </div>
+</div>
+
+<script src="cabina-drive-config.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+function humN(n){n=Number(n)||0;if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'k';return String(Math.round(n));}
+function money(n){n=Number(n)||0;if(n>=1000)return'$'+n.toLocaleString('en-US',{maximumFractionDigits:0});if(n>=1)return'$'+n.toFixed(2);return'$'+n.toFixed(3);}
+function esc(s){return String(s==null?'':s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+var NL='<span style="color:#56688c">[NO LEÍDO]</span>';
+var PAL=['#f0a93a','#3fd17e','#46cfe0','#9b8cff','#e84fb0','#f0c64a','#5b9bf0'];
+
+// ── fit: escalar stage 1920×1180 al viewport (sin scroll horizontal en móvil) ──
+function fit(){
+  var s=$('stage');if(!s)return;
+  var sc=Math.min(window.innerWidth/1920,window.innerHeight/1180);
+  s.style.transform='translate(-50%,-50%) scale('+sc+')';
+}
+fit();window.addEventListener('resize',fit);
+
+// ── reloj ──
+function clk(){var d=new Date();$('clock').textContent=[d.getHours(),d.getMinutes(),d.getSeconds()].map(function(x){return String(x).padStart(2,'0');}).join(':');}
+clk();setInterval(clk,1000);
+
+// ── telemetría decorativa ──
+var tel={a:62,b:74,c:55};
+setInterval(function(){
+  var j=function(v,r){return Math.max(8,Math.min(98,Math.round(v+(Math.random()-0.5)*r)));};
+  tel.a=j(tel.a,8);tel.b=j(tel.b,7);tel.c=j(tel.c,9);
+  $('telA').textContent=tel.a+'%';$('telAbar').style.width=tel.a+'%';
+  $('telB').textContent=tel.b+'%';$('telBbar').style.width=tel.b+'%';
+  $('telC').textContent=tel.c+'%';$('telCbar').style.width=tel.c+'%';
+},2400);
+
+// ── grafo orbital decorativo ──
+(function initGraph(){
+  var cv=$('graph');if(!cv)return;var ctx=cv.getContext('2d');
+  var DPR=Math.min(window.devicePixelRatio||1,2);
+  function size(){var W=cv.offsetWidth||640,H=cv.offsetHeight||330;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);return{W:W,H:H};}
+  var dim=size(),W=dim.W,H=dim.H;
+  var colors=['#3fd17e','#5b9bf0','#9b8cff','#f0883a','#f0c64a','#e84fb0','#46cfe0'];
+  var seed=20260622;var rnd=function(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+  var N=120,nodes=[];
+  for(var i=0;i<N;i++)nodes.push({x:W*0.5+(rnd()-0.5)*W*0.62,y:H*0.5+(rnd()-0.5)*H*0.62,vx:0,vy:0,r:1.4+rnd()*2.2,c:colors[(rnd()*colors.length)|0],hub:false,ph:rnd()*6.28});
+  var h1=6,h2=Math.floor(N*0.46);
+  nodes[h1].hub=true;nodes[h1].r=6.5;nodes[h1].c='#ffffff';nodes[h1].x=W*0.34;nodes[h1].y=H*0.46;
+  nodes[h2].hub=true;nodes[h2].r=7.5;nodes[h2].c='#5dffb0';nodes[h2].x=W*0.66;nodes[h2].y=H*0.55;
+  var links=[];
+  for(var i2=0;i2<N;i2++){var deg=1+((rnd()*2)|0);for(var d=0;d<deg;d++){var j2=(rnd()*N)|0;if(j2!==i2)links.push([i2,j2]);}}
+  for(var i3=0;i3<N;i3++){if(rnd()<0.16)links.push([i3,rnd()<0.5?h1:h2]);}
+  var pad=14,t=0;
+  function step(){t+=0.016;
+    for(var i=0;i<N;i++){var a=nodes[i];for(var j=i+1;j<N;j++){var b=nodes[j];var dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy||0.01;if(d2<28000){var dd=Math.sqrt(d2),f=200/d2,fx=dx/dd*f,fy=dy/dd*f;a.vx+=fx;a.vy+=fy;b.vx-=fx;b.vy-=fy;}}}
+    for(var l=0;l<links.length;l++){var a2=nodes[links[l][0]],b2=nodes[links[l][1]];var dx2=b2.x-a2.x,dy2=b2.y-a2.y,d3=Math.sqrt(dx2*dx2+dy2*dy2)||0.01;var f2=(d3-72)*0.0026,fx2=dx2/d3*f2,fy2=dy2/d3*f2;a2.vx+=fx2;a2.vy+=fy2;b2.vx-=fx2;b2.vy-=fy2;}
+    for(var i4=0;i4<N;i4++){var a3=nodes[i4];a3.vx+=(W*0.5-a3.x)*0.0006;a3.vy+=(H*0.5-a3.y)*0.0006;a3.vx*=0.85;a3.vy*=0.85;a3.x+=a3.vx;a3.y+=a3.vy;if(a3.x<pad){a3.x=pad;a3.vx*=-0.5;}if(a3.x>W-pad){a3.x=W-pad;a3.vx*=-0.5;}if(a3.y<pad){a3.y=pad;a3.vy*=-0.5;}if(a3.y>H-pad){a3.y=H-pad;a3.vy*=-0.5;}}
+    ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
+    for(var l2=0;l2<links.length;l2++){var a4=nodes[links[l2][0]],b4=nodes[links[l2][1]];ctx.strokeStyle='rgba(110,150,210,0.09)';ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(a4.x,a4.y);ctx.lineTo(b4.x,b4.y);ctx.stroke();}
+    for(var i5=0;i5<N;i5++){var a5=nodes[i5];var pr=a5.hub?a5.r*(1+0.12*Math.sin(t*1.6+a5.ph)):a5.r;var g=ctx.createRadialGradient(a5.x,a5.y,0,a5.x,a5.y,pr*4);g.addColorStop(0,a5.c);g.addColorStop(0.42,a5.c+(a5.hub?'cc':'55'));g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(a5.x,a5.y,pr*4,0,6.2832);ctx.fill();ctx.fillStyle=a5.c;ctx.beginPath();ctx.arc(a5.x,a5.y,pr,0,6.2832);ctx.fill();}
+    ctx.globalCompositeOperation='source-over';requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+})();
+
+// ── chip helper ──
+function chip(name,right,color){
+  return '<div style="display:flex;align-items:center;gap:10px"><span style="width:26px;height:26px;border-radius:7px;background:'+color+'22;display:flex;align-items:center;justify-content:center;flex:none;border:1px solid '+color+'55"><span style="width:8px;height:8px;border-radius:50%;background:'+color+'"></span></span><span style="flex:1;font:500 13px Rajdhani;color:#dbe6fb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(name)+'</span><span style="font:400 10px Space Mono,monospace;color:#7d93bd">'+right+'</span></div>';
+}
+
+// ── FUENTE DE DATOS: snapshot cifrado (mismo pipeline que cabina-drive) ──
+var CFG=window.KAIROS_DRIVE||{};
+function getPass(){
+  var h=(location.hash.match(/[#&]k=([^&]+)/)||[])[1];
+  if(h){try{h=decodeURIComponent(h);}catch(e){}try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}return h;}
+  try{return localStorage.getItem('kairos_pass')||sessionStorage.getItem('kairos_pass')||(CFG.defaultPass||'');}catch(e){return CFG.defaultPass||'';}
+}
+var PASS=getPass();
+function b64d(s){var bin=atob(String(s||''));var u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u;}
+function fetchEnvelope(){
+  var url=CFG.localFile
+    ?encodeURI(CFG.localFile)+'?_='+Date.now()
+    :'https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(CFG.fileId||'')+'?alt=media&key='+encodeURIComponent(CFG.apiKey||'')+'&_='+Date.now();
+  return fetch(url,{cache:'no-store'}).then(function(r){
+    if(!r.ok)throw new Error('fetch '+r.status);
+    window.__fromCache=(r.headers.get('X-Kairos-Cache')==='HIT');
+    return r.json();
+  });
+}
+function decryptEnvelope(env,pass){
+  var enc=new TextEncoder();
+  return crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']).then(function(baseKey){
+    if(!env||!env.salt||!env.iv||!env.ct||!env.tag)throw new Error('envelope incompleto');
+    if(env.hash&&env.hash!=='SHA-256')throw new Error('hash no permitido');
+    if(env.cipher&&env.cipher!=='AES-256-GCM')throw new Error('cipher no permitido');
+    var iter=Number(env.iter)||150000;if(iter<150000)throw new Error('iteraciones insuficientes');
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt:b64d(env.salt),iterations:iter,hash:'SHA-256'},baseKey,{name:'AES-GCM',length:256},false,['decrypt']);
+  }).then(function(key){
+    var ct=b64d(env.ct),tag=b64d(env.tag),data=new Uint8Array(ct.length+tag.length);data.set(ct,0);data.set(tag,ct.length);
+    return crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(env.iv)},key,data);
+  }).then(function(pt){return JSON.parse(new TextDecoder().decode(pt));});
+}
+function getData(){
+  if(!CFG.localFile&&(!CFG.fileId||!CFG.apiKey))return Promise.resolve('NO_CONFIG');
+  if(!PASS)return Promise.resolve('NEED_PASS');
+  return fetchEnvelope().then(function(env){
+    return decryptEnvelope(env,PASS).then(function(d){window.__SNAP=d;return d;},function(){return 'BAD_PASS';});
+  }).catch(function(){return null;});
+}
+
+// ── candado ──
+function lock(title,msg,form,errMsg){
+  $('gate-t').textContent=title;$('gate-x').textContent=msg;
+  $('gate-form').style.display=form?'flex':'none';
+  $('gate-err').textContent=errMsg||'';
+  $('gate').classList.add('on');
+  if(form)setTimeout(function(){try{$('gate-pass').focus();}catch(e){}},60);
+}
+function unlock(){$('gate').classList.remove('on');}
+function entrar(){
+  var v=$('gate-pass').value.trim();if(!v)return;
+  PASS=v;
+  try{($('gate-rem').checked?localStorage:sessionStorage).setItem('kairos_pass',v);}catch(e){}
+  $('gate-err').textContent='Descifrando…';cargar();
+}
+$('gate-go').addEventListener('click',entrar);
+$('gate-pass').addEventListener('keydown',function(e){if(e.key==='Enter')entrar();});
+$('btn-bloquear').addEventListener('click',function(){
+  PASS='';try{localStorage.removeItem('kairos_pass');sessionStorage.removeItem('kairos_pass');}catch(e){}
+  lock('Nave bloqueada','Escribe tu frase para volver a entrar.',true,'');
+});
+
+function spin(on){var e=$('spin-top');if(e)e.style.display=on?'':'none';}
+function mostrarOffline(on){var b=$('offline-badge');if(b)b.classList.toggle('on',!!on);}
+
+// ── render: mapea snapshot → UI de la Nave ──
+function render(d){
+  var s=d.summary||{},mu=Array.isArray(d.modelUsage)?d.modelUsage:[];
+  var daily=Array.isArray(d.daily)?d.daily:[];
+  var sk=(d.skills&&Array.isArray(d.skills.active))?d.skills.active:[];
+  var mem=(d.memory&&d.memory.stats)||{};
+  var autos=Array.isArray(d.automations)?d.automations:[];
+  var proj=Array.isArray(d.recentProjects)?d.recentProjects:[];
+  var cw=(d.usage&&d.usage.claudeWindow)||null;
+  var meta=d._vps||{};
+
+  // tokens + gasto
+  var tok={i:0,o:0,c:0},gasto=0;
+  mu.forEach(function(m){tok.i+=m.input_tokens||0;tok.o+=m.output_tokens||0;tok.c+=(m.cache_read_input_tokens||0)+(m.cache_creation_input_tokens||0);gasto+=m.cost_usd||0;});
+  var tokTotal=tok.i+tok.o+tok.c;
+  $('gasto-total').textContent=money(gasto);
+  $('tok-total').textContent=humN(tokTotal);
+  $('tok-in').textContent=humN(tok.i);$('tok-out').textContent=humN(tok.o);$('tok-cache').textContent=humN(tok.c);
+  var ratio=tokTotal?(tok.o/tokTotal):0;$('tok-ring').setAttribute('stroke-dashoffset',(251.3*(1-ratio)).toFixed(1));
+
+  // racha (días con actividad)
+  var diasActivos=daily.filter(function(x){return(x.messages||0)>0;}).length;
+  $('kpi-racha').textContent=diasActivos||'—';
+
+  // actividad
+  $('act-7d').textContent=(s.messagesLast7d!=null)?humN(s.messagesLast7d):'—';
+  $('act-sub').textContent='7d · '+(s.projectsTracked!=null?s.projectsTracked+' proyectos':'—');
+  $('valor-7d').textContent=(s.valueExtracted7d!=null)?money(s.valueExtracted7d):'—';
+
+  // ROI
+  var valor=s.valueExtracted7d,roi=(valor!=null&&gasto>0)?(valor/gasto):null;
+  $('kpi-roi').textContent=roi!=null?roi.toFixed(2)+'×':'—';
+  if(roi!=null){var rc=roi>=1?'#3fd17e':'#f0a93a';$('kpi-roi').style.color=rc;$('roi-dot').style.background=rc;$('roi-dot').style.boxShadow='0 0 9px '+rc;}
+
+  // gasto hoy + sparkline
+  var hoy=daily.length?daily[daily.length-1]:null;
+  $('gasto-hoy').textContent=hoy?money(hoy.cost||0):'—';
+  var costs=daily.map(function(x){return x.cost||0;});
+  if(costs.length){var mx=Math.max.apply(null,costs)||1,n=costs.length;
+    var pts=costs.map(function(c,idx){var x=(idx/(n-1||1))*250;var y=52-(c/mx)*46;return[x,y];});
+    var line=pts.map(function(p,idx){return(idx?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ');
+    $('spark-line').setAttribute('d',line);$('spark-fill').setAttribute('d',line+' L250,56 L0,56 Z');}
+
+  // barras diarias
+  var msgsArr=daily.map(function(x){return x.messages||0;});
+  var totMsg=msgsArr.reduce(function(a,b){return a+b;},0);
+  $('dias-total').textContent=humN(totMsg)+' total';
+  var maxM=Math.max.apply(null,msgsArr.length?msgsArr:[1])||1;
+  var last=msgsArr.slice(-10),lastDays=daily.slice(-10);
+  $('dias-bars').innerHTML=last.map(function(m,i){
+    var h=Math.max(4,(m/maxM)*100),dd=lastDays[i]&&lastDays[i].day?String(lastDays[i].day).slice(8):'',hot=i===last.length-1;
+    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px"><div style="width:100%;height:'+h+'%;background:linear-gradient(180deg,'+(hot?'#6fb0ff,#3a6fc0':'#5b9bf0,#2c5aa0')+');border-radius:3px 3px 0 0'+(hot?';box-shadow:0 0 10px rgba(91,155,240,0.4)':'')+'"></div><span style="font:400 9px Space Mono,monospace;color:'+(hot?'#9fb3d6':'#56688c')+'">'+dd+'</span></div>';
+  }).join('');
+
+  // skills
+  var skSorted=sk.slice().sort(function(a,b){return(b.uses7d||0)-(a.uses7d||0);});
+  $('kpi-skills').textContent=sk.length||'—';
+  $('skills-count').textContent=(sk.length||0)+' EN USO';
+  $('kpi-skills-bar').style.width=Math.min(100,(sk.length/12)*100)+'%';
+  $('skills-list').innerHTML=skSorted.length?skSorted.slice(0,7).map(function(x,i){
+    return chip('/'+(x.name||'?'),(x.uses7d!=null?x.uses7d+' usos 7d':(x.totalUses||0)+' usos'),PAL[i%PAL.length]);
+  }).join(''):'<div style="font:400 12px Rajdhani;color:#56688c">'+NL+' sin skills</div>';
+
+  // memoria
+  $('kpi-nodos').textContent=(mem.totalFiles!=null)?humN(mem.totalFiles):'—';
+  $('mem-nodos').textContent=(mem.totalFiles!=null)?humN(mem.totalFiles):'—';
+  $('mem-rel').textContent=(mem.totalVectors!=null)?humN(mem.totalVectors):'—';
+  $('mem-fresh').textContent='frescura '+(mem.freshness!=null?mem.freshness:'—');
+
+  // ventana de uso
+  if(cw){$('kpi-ventana').textContent=(cw.pctUsed!=null?cw.pctUsed:'—');$('kpi-ventana-sub').textContent=cw.plan||'plan';}
+  else{$('kpi-ventana').textContent='—';$('kpi-ventana-sub').textContent='[NO LEÍDO]';}
+
+  // salud compuesta
+  var salud=0,cmp=0;
+  if(s.messagesLast7d!=null){cmp++;salud+=s.messagesLast7d>0?34:10;}
+  if(sk.length){cmp++;salud+=33;}
+  if(mem.totalFiles){cmp++;salud+=33;}
+  var saludN=cmp?Math.round(salud):'—';
+  $('kpi-salud').textContent=saludN;
+  $('kpi-salud-txt').textContent=saludN==='—'?'—':(saludN>=80?'Excelente':saludN>=50?'Estable':'Bajo');
+  if(saludN!=='—'){$('salud-ring').setAttribute('stroke-dashoffset',(169.6*(1-saludN/100)).toFixed(1));}
+
+  // sistema
+  $('sys-val').textContent='Operativo';
+  var propTxt=(d.propuestaHoy&&d.propuestaHoy.titulo)?'Propuesta: '+d.propuestaHoy.titulo.slice(0,52)+'…':'snapshot descifrado · solo lectura';
+  $('sys-sub').textContent=propTxt;
+
+  // automatizaciones
+  $('autos-sub').textContent=(autos.length||0)+' flujos';
+  $('autos-list').innerHTML=autos.length?autos.slice(0,5).map(function(a){
+    var on=/activ|enabled|on/i.test(a.status||''),dot=on?'#3fd17e':'#f0a93a';
+    return '<div style="display:flex;align-items:center;gap:9px"><span style="width:7px;height:7px;border-radius:50%;background:'+dot+';box-shadow:0 0 6px '+dot+'"></span><span style="flex:1;font:500 12px Rajdhani;color:#cdd9f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(a.name||'?')+'</span><span style="font:600 10px Rajdhani;color:'+dot+'">'+esc(a.cadence||a.status||'')+'</span></div>';
+  }).join(''):'<div style="font:400 12px Rajdhani;color:#56688c">'+NL+'</div>';
+
+  // modelos
+  var muSorted=mu.slice().sort(function(a,b){return(b.cost_usd||0)-(a.cost_usd||0);});
+  $('stack-sub').textContent=(mu.length||0)+' modelos';
+  $('stack-list').innerHTML=muSorted.length?muSorted.slice(0,6).map(function(m,i){
+    return chip(String(m.model||'?').replace(/-/g,' '),money(m.cost_usd||0),PAL[i%PAL.length]);
+  }).join(''):'<div style="font:400 12px Rajdhani;color:#56688c">'+NL+'</div>';
+
+  // proyectos
+  var projSorted=proj.slice().sort(function(a,b){return(b.messages||0)-(a.messages||0);});
+  $('proy-sub').textContent=(proj.length||0)+' rastreados';
+  $('proy-list').innerHTML=projSorted.length?projSorted.slice(0,5).map(function(p){
+    return '<div style="display:flex;align-items:center;gap:9px"><span style="width:7px;height:7px;border-radius:50%;background:#5b9bf0;box-shadow:0 0 6px #5b9bf0"></span><span style="flex:1;font:500 12px Rajdhani;color:#cdd9f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p.displayName||p.key||'?')+'</span><span style="font:600 10px Space Mono,monospace;color:#9fb3d6">'+(p.messages||0)+'</span></div>';
+  }).join(''):'<div style="font:400 12px Rajdhani;color:#56688c">'+NL+'</div>';
+
+  // corte / antigüedad
+  var ageS=meta.antiguedadSegundos,gen=meta.generadoEn||d.generatedAt;
+  if(ageS==null&&gen)ageS=Math.floor((Date.now()-new Date(gen).getTime())/1000);
+  var stale=ageS!=null&&ageS>7200,ageT=ageS==null?'—':(ageS<3600?Math.round(ageS/60)+' min':Math.round(ageS/3600)+' h');
+  $('corte-chip').textContent='CORTE · hace '+(ageT==='—'?'—':ageT)+(stale?' (viejo)':'');
+  $('corte-chip').style.color=stale?'#f0a93a':'#56688c';
+  $('mode-label').textContent=stale?'CORTE DESACTUALIZADO':'NUBE · SOLO LECTURA';
+  if(stale)$('mode-label').style.color='#f0a93a';
+}
+
+function offline(){
+  $('sys-val').textContent='Sin corte';$('sys-sub').textContent='esperando snapshot…';
+  $('mode-label').textContent='SIN DATOS';$('mode-label').style.color='#f0a93a';
+  $('gasto-total').textContent='—';
+}
+
+// ── ciclo de carga ──
+function cargar(){
+  window.__fromCache=false;spin(true);
+  getData().then(function(d){
+    spin(false);
+    if(d==='NO_CONFIG'){lock('Falta configurar','Crea cabina-drive-config.js con localFile o fileId+apiKey.',false,'');return;}
+    if(d==='NEED_PASS'){lock('Nave cifrada','Escribe tu frase secreta para descifrar tus datos. Nunca sale de este navegador.',true,'');return;}
+    if(d==='BAD_PASS'){lock('Frase incorrecta','Esa frase no descifra el corte. Revísala e intenta otra vez.',true,'✕ La frase no coincide.');return;}
+    if(d){unlock();render(d);mostrarOffline(window.__fromCache);}
+    else if(window.__SNAP){unlock();render(window.__SNAP);mostrarOffline(true);}
+    else{unlock();offline();mostrarOffline(!navigator.onLine);}
+  });
+}
+
+cargar();
+setInterval(function(){if(PASS)cargar();},5*60*1000);
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(function(e){console.warn('[KAIROS SW]',e);});
+}
+})();
+</script>
+</body>
+</html>
